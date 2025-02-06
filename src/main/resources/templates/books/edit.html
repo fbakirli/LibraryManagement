@@ -1,0 +1,18 @@
+<form th:action="@{/books/edit/{id}(id=${book.id})}" th:object="${book}" method="post">
+    <label for="isbn">ISBN:</label>
+    <input type="text" id="isbn" name="isbn" th:field="*{isbn}" required />
+    <br>
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" th:field="*{title}" required />
+    <br>
+    <label for="stock">Stock:</label>
+    <input type="number" id="stock" name="stock" th:field="*{stock}" required />
+    <br>
+    <label for="authors">Authors:</label>
+    <select id="authors" name="authorIds" multiple>
+        <option th:each="author : ${authors}" th:value="${author.id}" th:text="${author.name}" th:selected="${book.authors.contains(author)}"></option>
+    </select>
+    <br>
+    <button type="submit">Update Book</button>
+</form>
+4

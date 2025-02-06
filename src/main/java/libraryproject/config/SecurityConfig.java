@@ -19,14 +19,21 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Disable CSRF for simplicity in Postman
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/login").permitAll() // Allow access to login endpoint
-                        .anyRequest().authenticated() // Protect all other endpoints
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/**", "/login", "/resources/**").permitAll()
+                        .anyRequest().authenticated()
                 )
-                .formLogin(form -> form.disable()) // Disable default form login
-                .httpBasic(httpBasic -> httpBasic.disable()); // Disable basic auth
-
+                .formLogin(form -> form
+                        .loginPage("/auth/login")
+                        .defaultSuccessUrl("/home", true)
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/auth/logout")
+                        .logoutSuccessUrl("/auth/login?logout=true")
+                        .permitAll()
+                );
         return http.build();
     }
 }

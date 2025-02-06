@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Author</title>
+</head>
+<body>
+<h1>Edit Author</h1>
+<form th:action="@{/authors/edit/{id}(id=${author.id})}" method="post">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" th:value="${author.name}" required>
+    <br>
+    <label for="bio">Bio:</label>
+    <textarea id="bio" name="bio" th:text="${author.bio}"></textarea>
+    <br>
+    <button type="submit">Update</button>
+</form>
+<a href="/authors">Back to Authors</a>
+</body>
+</html>
