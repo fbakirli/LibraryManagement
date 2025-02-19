@@ -1,50 +1,55 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="">
 <head>
     <title>Edit Book</title>
 </head>
 <body>
 <h1>Edit Book</h1>
-
+<!-- Display error message if any -->
+<div th:if="${param.error}" style="color: red;">
+    <p th:text="${param.error}"></p>
+</div>
 <form th:action="@{/books/edit/{id}(id=${book.id})}" th:object="${book}" method="post" enctype="multipart/form-data">
+    <!-- ISBN Field -->
     <label for="isbn">ISBN:</label>
     <input type="text" id="isbn" name="isbn" th:field="*{isbn}" required />
     <br>
 
+    <!-- Title Field -->
     <label for="title">Title:</label>
     <input type="text" id="title" name="title" th:field="*{title}" required />
     <br>
 
+    <!-- Stock Field -->
     <label for="stock">Stock:</label>
     <input type="number" id="stock" name="stock" th:field="*{stock}" required />
     <br>
 
-    <label for="authors">Authors:</label>
-    <select id="authors" name="authorIds" multiple>
-        <option th:each="author : ${authors}"
-                th:value="${author.id}"
-                th:text="${author.name}"
-                th:selected="${book.authors.contains(author)}">
-        </option>
+    <!-- Category Field -->
+    <label for="categoryId">Category:</label>
+    <select id="categoryId" name="categoryId" required>
+        <option value="">Select a category</option>
+        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
     </select>
     <br>
 
-    <!-- Display the current image -->
-    <label>Current Image:</label>
-    <br>
-    <img th:if="${book.imagePath}" th:src="${book.imagePath}" alt="Book Image" width="100" height="150"/>
-    <p th:unless="${book.imagePath}">No Image</p>
+    <!-- Authors Field -->
+    <label for="authors">Authors:</label>
+    <select id="authors" name="authorIds" multiple required>
+        <option th:each="author : ${authors}" th:value="${author.id}" th:text="${author.name}"></option>
+    </select>
     <br>
 
-    <!-- Upload new image -->
-    <label for="image">Upload New Image:</label>
+    <!-- Image Field -->
+    <label for="image">Image:</label>
     <input type="file" id="image" name="file" />
     <br>
 
-    <button type="submit">Update Book</button>
+    <!-- Submit Button -->
+    <button type="submit">Save Changes</button>
 </form>
 
-<a href="/" style="display: inline-block; margin-top: 10px;">Home</a> <!-- Home button -->
-
+<!-- Home Button -->
+<a href="/home">Home</a>
 </body>
 </html>

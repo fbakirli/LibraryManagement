@@ -2,8 +2,10 @@ package libraryproject.controller;
 
 import libraryproject.entity.Author;
 import libraryproject.entity.Book;
+import libraryproject.entity.Category;
 import libraryproject.service.AuthorService;
 import libraryproject.service.BookService;
+import libraryproject.service.CategoryService;
 import libraryproject.service.S3Service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -11,12 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,6 +24,7 @@ public class BookController {
 
     private final BookService bookService;
     private final AuthorService authorService;
+    private final CategoryService categoryService;
     private final S3Service s3Service;
 
     @Value("${aws.s3.bucket.name}")
@@ -36,9 +33,10 @@ public class BookController {
     @Value("${aws.s3.region}")
     private String region;
 
-    public BookController(BookService bookService, AuthorService authorService, S3Service s3Service) {
+    public BookController(BookService bookService, AuthorService authorService, CategoryService categoryService, S3Service s3Service) {
         this.bookService = bookService;
         this.authorService = authorService;
+        this.categoryService = categoryService;
         this.s3Service = s3Service;
     }
 
@@ -59,21 +57,39 @@ public class BookController {
     public String createBookForm(Model model) {
         model.addAttribute("book", new Book());
         model.addAttribute("authors", authorService.findAll());
+        model.addAttribute("categories", categoryService.getAllCategories());
         return "books/create";
     }
 
     @PostMapping("/create")
     public String createBook(@ModelAttribute Book book,
-                             @RequestParam("file") MultipartFile file) {
+                             @RequestParam("file") MultipartFile file,
+                             @RequestParam("authorIds") List<Long> authorIds,
+                             @RequestParam("categoryId") Long categoryId) {
         if (!file.isEmpty()) {
             String s3Url = s3Service.uploadFile(file); // ✅ Use S3 instead of local storage
             book.setImagePath(s3Url);
         }
+
+        // Validate and set authors
+        Set<Author> authors = new HashSet<>(authorService.findAuthorsByIds(authorIds));
+        if (authors.isEmpty()) {
+            // Handle the case where no authors are selected
+            return "redirect:/books/create?error=No authors selected";
+        }
+        book.setAuthors(authors);
+
+        // Validate and set category
+        Category category = categoryService.getCategoryById(categoryId).orElse(null);
+        if (category == null) {
+            // Handle the case where the category is not found
+            return "redirect:/books/create?error=Category not found";
+        }
+        book.setCategory(category);
+
         bookService.save(book);
         return "redirect:/books";
     }
-
-
 
     @GetMapping("/edit/{id}")
     public String editBookForm(@PathVariable Long id, Model model) {
@@ -81,9 +97,9 @@ public class BookController {
         if (book == null) {
             return "redirect:/books";
         }
-        System.out.println("Book Image Path: " + book.getImagePath()); // Debugging
         model.addAttribute("book", book);
         model.addAttribute("authors", authorService.findAll());
+        model.addAttribute("categories", categoryService.getAllCategories());
         return "books/edit";
     }
 
@@ -91,7 +107,8 @@ public class BookController {
     public String editBook(
             @PathVariable Long id,
             @ModelAttribute Book book,
-            @RequestParam("authorIds") List<Long> authorIds, // Ensure this matches the form field name
+            @RequestParam("authorIds") List<Long> authorIds,
+            @RequestParam("categoryId") Long categoryId,
             @RequestParam("file") MultipartFile file) {
 
         Book existingBook = bookService.findById(id);
@@ -108,9 +125,21 @@ public class BookController {
             book.setImagePath(existingBook.getImagePath());
         }
 
-        // Fetch the selected authors and set them in the book
+        // Validate and set authors
         Set<Author> authors = new HashSet<>(authorService.findAuthorsByIds(authorIds));
+        if (authors.isEmpty()) {
+            // Handle the case where no authors are selected
+            return "redirect:/books/edit/" + id + "?error=No authors selected";
+        }
         book.setAuthors(authors);
+
+        // Validate and set category
+        Category category = categoryService.getCategoryById(categoryId).orElse(null);
+        if (category == null) {
+            // Handle the case where the category is not found
+            return "redirect:/books/edit/" + id + "?error=Category not found";
+        }
+        book.setCategory(category);
 
         // Set the ID to ensure the existing book is updated
         book.setId(id);

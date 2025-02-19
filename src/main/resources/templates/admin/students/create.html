@@ -1,34 +1,31 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Orders List</title>
+    <title>Create Student</title>
 </head>
 <body>
-<h1>Orders List</h1>
-<a th:href="@{/admin/orders/create}">Create New Order</a>
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Student ID</th>
-        <th>Book ID</th>
-        <th>Order Date</th>
-        <th>Return Date</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="order : ${orders}">
-        <td th:text="${order.id}"></td>
-        <td th:text="${order.student.id}"></td>
-        <td th:text="${order.book.id}"></td>
-        <td th:text="${order.orderDate}"></td>
-        <td th:text="${order.returnDate}"></td>
-        <td>
-            <a th:href="@{/admin/orders/return/{id}(id=${order.id})}">Return</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<h1>Create Student</h1>
+<form th:action="@{/admin/students/create}" th:object="${student}" method="post">
+    <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name" th:field="*{name}" />
+        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+    </div>
+    <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" th:field="*{email}" />
+        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+    </div>
+    <div>
+        <label for="phone">Phone:</label>
+        <input type="text" id="phone" th:field="*{phone}" />
+        <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
+    </div>
+    <div>
+        <button type="submit">Create</button>
+    </div>
+</form>
+<a th:href="@{/admin/students}">Back to List</a>
+<a th:href="@{/home}">Back to Home Page</a>
 </body>
 </html>

@@ -7,10 +7,13 @@
 <h1>Welcome to the Admin Dashboard</h1>
 
 <h2>Admin Features</h2>
-<a href="/books">Manage Books</a><br>
-<a href="/admin/students">Manage Students</a><br>
-<a href="/admin/orders">Manage Orders</a>
-
+<ul>
+    <li><a href="/books">Manage Books</a></li>
+    <li><a href="/admin/students">Manage Students</a></li>
+    <li><a href="/admin/orders">Manage Orders</a></li>
+    <li><a href="/authors">Manage Authors</a></li> <!-- Added link to Authors module -->
+    <li><a href="/categories">Manage Categories</a></li> <!-- Added link to Categories module -->
+</ul>
 
 <!-- Logout Button -->
 <form th:action="@{/auth/logout}" method="post">

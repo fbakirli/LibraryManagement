@@ -35,6 +35,10 @@ public class Book {
     )
     private Set<Author> authors = new HashSet<>();
 
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
     // Getters and Setters
     public Long getId() {
         return id;
@@ -90,5 +94,13 @@ public class Book {
 
     public void setAuthorNames(String authorNames) {
         this.authorNames = authorNames;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

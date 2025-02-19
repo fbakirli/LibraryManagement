@@ -15,18 +15,22 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
+    // Fetch all books
     public List<Book> findAll() {
         return bookRepository.findAll();
     }
 
+    // Find a book by ID
     public Book findById(Long id) {
         return bookRepository.findById(id).orElse(null);
     }
 
+    // Save or update a book
     public Book save(Book book) {
         return bookRepository.save(book);
     }
 
+    // Delete a book by ID
     public void deleteById(Long id) {
         bookRepository.deleteById(id);
     }
@@ -36,6 +40,11 @@ public class BookService {
         Book book = findBookByIdOrThrow(bookId);
         book.setImagePath(imagePath);
         bookRepository.save(book);
+    }
+
+    // New method to find books by category ID
+    public List<Book> findBooksByCategoryId(Long categoryId) {
+        return bookRepository.findByCategoryId(categoryId);
     }
 
     // Utility method to get book or throw an exception

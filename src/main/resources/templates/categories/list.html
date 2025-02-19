@@ -19,11 +19,14 @@
         <td th:text="${category.id}"></td>
         <td th:text="${category.name}"></td>
         <td>
+            <!-- Link to view books in this category -->
+            <a th:href="@{/categories/{id}/books(id=${category.id})}">View Books</a>
             <a th:href="@{/categories/edit/{id}(id=${category.id})}">Edit</a>
             <a th:href="@{/categories/delete/{id}(id=${category.id})}">Delete</a>
         </td>
     </tr>
     </tbody>
 </table>
+<a href="/home">Home</a>
 </body>
 </html>

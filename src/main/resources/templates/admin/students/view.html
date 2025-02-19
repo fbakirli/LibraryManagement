@@ -21,6 +21,31 @@
     <label>Phone:</label>
     <span th:text="${student.phone}"></span>
 </div>
+
+<h2>Past Orders</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Order ID</th>
+        <th>Book ID</th>
+        <th>Book Title</th>
+        <th>Order Date</th>
+        <th>Return Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${student.orders}">
+        <td th:text="${order.id}"></td>
+        <td th:text="${order.book.id}"></td>
+        <td th:text="${order.book.title}"></td>
+        <td th:text="${order.orderDate}"></td>
+        <td th:text="${order.returnDate}"></td>
+    </tr>
+    </tbody>
+</table>
+
 <a th:href="@{/admin/students}">Back to List</a>
+<br />
+<a th:href="@{/home}">Back to Home Page</a>
 </body>
 </html>
