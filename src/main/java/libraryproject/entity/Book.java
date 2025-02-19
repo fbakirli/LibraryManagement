@@ -1,6 +1,8 @@
 package libraryproject.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,9 +13,15 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "ISBN is mandatory")
     private String isbn;
+
+    @NotBlank(message = "Title is mandatory")
     private String title;
-    private String image;
+
+    private String imagePath; // Updated field for image path
+
+    @NotNull(message = "Stock is mandatory")
     private Integer stock;
 
     @Transient
@@ -27,6 +35,7 @@ public class Book {
     )
     private Set<Author> authors = new HashSet<>();
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -51,12 +60,12 @@ public class Book {
         this.title = title;
     }
 
-    public String getImage() {
-        return image;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public Integer getStock() {

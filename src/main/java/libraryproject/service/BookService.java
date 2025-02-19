@@ -30,4 +30,17 @@ public class BookService {
     public void deleteById(Long id) {
         bookRepository.deleteById(id);
     }
+
+    // New method to update the image path only
+    public void updateBookImage(Long bookId, String imagePath) {
+        Book book = findBookByIdOrThrow(bookId);
+        book.setImagePath(imagePath);
+        bookRepository.save(book);
+    }
+
+    // Utility method to get book or throw an exception
+    private Book findBookByIdOrThrow(Long bookId) {
+        return bookRepository.findById(bookId)
+                .orElseThrow(() -> new RuntimeException("Book not found with ID: " + bookId));
+    }
 }

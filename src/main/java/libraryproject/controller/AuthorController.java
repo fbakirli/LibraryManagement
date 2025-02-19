@@ -1,19 +1,25 @@
 package libraryproject.controller;
 
 import libraryproject.entity.Author;
+import libraryproject.entity.Order;
 import libraryproject.service.AuthorService;
+import libraryproject.service.OrderService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/authors")
 public class AuthorController {
 
     private final AuthorService authorService;
+    private final OrderService orderService;
 
-    public AuthorController(AuthorService authorService) {
+    public AuthorController(AuthorService authorService, OrderService orderService) {
         this.authorService = authorService;
+        this.orderService = orderService;
     }
 
     @GetMapping
@@ -52,5 +58,12 @@ public class AuthorController {
     public String deleteAuthor(@PathVariable Long id) {
         authorService.deleteAuthorById(id);
         return "redirect:/authors";
+    }
+
+    @GetMapping("/admin/orders")
+    public String manageOrders(Model model) {
+        List<Order> orders = orderService.findAll();
+        model.addAttribute("orders", orders);
+        return "admin/orders";
     }
 }

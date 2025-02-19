@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Home</title>
+</head>
+<body>
+<h1>Welcome to the Admin Dashboard</h1>
+
+<h2>Admin Features</h2>
+<a href="/books">Manage Books</a><br>
+<a href="/admin/students">Manage Students</a><br>
+<a href="/admin/orders">Manage Orders</a>
+
+
+<!-- Logout Button -->
+<form th:action="@{/auth/logout}" method="post">
+    <button type="submit">Logout</button>
+</form>
+</body>
+</html>

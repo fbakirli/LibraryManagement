@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Student</title>
+</head>
+<body>
+<h1>View Student</h1>
+<div>
+    <label>ID:</label>
+    <span th:text="${student.id}"></span>
+</div>
+<div>
+    <label>Name:</label>
+    <span th:text="${student.name}"></span>
+</div>
+<div>
+    <label>Email:</label>
+    <span th:text="${student.email}"></span>
+</div>
+<div>
+    <label>Phone:</label>
+    <span th:text="${student.phone}"></span>
+</div>
+<a th:href="@{/admin/students}">Back to List</a>
+</body>
+</html>

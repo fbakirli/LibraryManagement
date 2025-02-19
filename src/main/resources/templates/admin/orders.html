@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Manage Orders</title>
+</head>
+<body>
+<h1>Manage Orders</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Order ID</th>
+        <th>Student</th>
+        <th>Book</th>
+        <th>Order Date</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${orders}">
+        <td th:text="${order.id}">Order ID</td>
+        <td th:text="${order.student.username}">Student</td>
+        <td th:text="${order.book.title}">Book</td>
+        <td th:text="${order.orderDate}">Order Date</td>
+        <td>
+            <form th:action="@{/admin/orders/delete/{id}(id=${order.id})}" method="post">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<a href="/home">Back to Home</a>
+</body>
+</html>

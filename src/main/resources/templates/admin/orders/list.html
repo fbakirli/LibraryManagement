@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Orders List</title>
+</head>
+<body>
+<h1>Orders List</h1>
+<a th:href="@{/admin/orders/create}">Create New Order</a>
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Student ID</th>
+    <th>Book ID</th>
+    <th>Order Date</th>
+    <th>Return Date</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="order : ${orders}">
+    <td th:text="${order.id}"></td>
+    <td th:text="${order.student.id}"></td>
+    <td th:text="${order.book.id}"></td>
+    <td th:text="${order.orderDate}"></td>
+    <td th:text="${order.returnDate}"></td>
+    <td>
+      <a th:href="@{/admin/orders/return/{id}(id=${order.id})}">Return</a>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

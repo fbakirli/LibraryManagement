@@ -21,17 +21,21 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/login", "/resources/**").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/auth/**", "/login", "/resources/**").permitAll() // Public endpoints
+                        .requestMatchers("/admin/**").hasRole("ADMIN") // Only admins can access /admin/**
+                        .requestMatchers("/student/**").hasRole("STUDENT") // Only students can access /student/**
+                        .anyRequest().authenticated() // All other requests require authentication
                 )
                 .formLogin(form -> form
-                        .loginPage("/auth/login")
-                        .defaultSuccessUrl("/home", true)
+                        .loginPage("/auth/login") // Login page
+                        .defaultSuccessUrl("/home", true) // Redirect to /home after login
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/auth/logout")
-                        .logoutSuccessUrl("/auth/login?logout=true")
+                        .logoutUrl("/auth/logout") // Logout URL
+                        .logoutSuccessUrl("/auth/login?logout=true") // Redirect to login page after logout
+                        .invalidateHttpSession(true) // Invalidate session
+                        .deleteCookies("JSESSIONID") // Delete cookies
                         .permitAll()
                 );
         return http.build();

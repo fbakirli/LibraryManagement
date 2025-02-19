@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="eng">
 <head>
   <title>View Book</title>
 </head>
@@ -11,8 +11,10 @@
 <p><strong>Authors:</strong> <span th:text="${book.authorNames}"></span></p>
 <p><strong>Stock:</strong> <span th:text="${book.stock}"></span></p>
 <p><strong>Image:</strong></p>
-<img th:src="@{'/images/' + ${book.image}}" alt="Book Image" />
+<img th:if="${book.imagePath}" th:src="${book.imagePath}" alt="Book Image" width="150" height="200"/>
+<p th:unless="${book.imagePath}">No image available</p>
 <br>
 <a href="/books">Back to List</a>
+<a href="/" style="margin-left: 10px;">Go Back to Home</a>
 </body>
 </html>

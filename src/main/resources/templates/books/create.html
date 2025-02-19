@@ -1,4 +1,11 @@
-<form th:action="@{/books/create}" th:object="${book}" method="post">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+<head>
+    <title>Create Book</title>
+</head>
+<body>
+<h1>Create New Book</h1>
+<form th:action="@{/books/create}" th:object="${book}" method="post" enctype="multipart/form-data">
     <label for="isbn">ISBN:</label>
     <input type="text" id="isbn" name="isbn" th:field="*{isbn}" required />
     <br>
@@ -13,5 +20,11 @@
         <option th:each="author : ${authors}" th:value="${author.id}" th:text="${author.name}"></option>
     </select>
     <br>
+    <label for="image">Image:</label>
+    <input type="file" id="image" name="file" />
+    <br>
     <button type="submit">Save Book</button>
 </form>
+<a href="/">Home</a> <!-- Home button -->
+</body>
+</html>
