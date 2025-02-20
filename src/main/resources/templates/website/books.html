@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Books</title>
+</head>
+<body>
+<h1>Books</h1>
+
+<!-- Sidebar for categories -->
+<div style="float: left; width: 20%;">
+    <h3>Categories</h3>
+    <ul>
+        <li><a th:href="@{/website/books}">All Books</a></li>
+        <li th:each="category : ${categories}">
+            <a th:href="@{/website/books/category/{id}(id=${category.id})}" th:text="${category.name}"></a>
+        </li>
+    </ul>
+</div>
+
+<!-- Main content for books -->
+<div style="float: right; width: 80%;">
+    <h2 th:if="${selectedCategory != null}" th:text="'Books in Category: ' + ${selectedCategory.name}"></h2>
+    <h2 th:unless="${selectedCategory != null}">All Books</h2>
+
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Authors</th>
+            <th>Category</th>
+            <th>Stock</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="book : ${books}">
+            <td th:text="${book.title}"></td>
+            <td th:text="${book.authorNames}"></td>
+            <td th:text="${book.category.name}"></td>
+            <td th:text="${book.stock}"></td>
+            <td>
+                <a th:href="@{/website/books/{id}(id=${book.id})}">View Details</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -1,21 +1,19 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="eng">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-  <title>View Book</title>
+    <title>Book Details</title>
 </head>
 <body>
-<h1>View Book</h1>
-<p><strong>ID:</strong> <span th:text="${book.id}"></span></p>
-<p><strong>ISBN:</strong> <span th:text="${book.isbn}"></span></p>
+<h1>Book Details</h1>
 <p><strong>Title:</strong> <span th:text="${book.title}"></span></p>
+<p><strong>ISBN:</strong> <span th:text="${book.isbn}"></span></p>
 <p><strong>Authors:</strong> <span th:text="${book.authorNames}"></span></p>
-<p><strong>Category:</strong> <span th:text="${book.category.name}"></span></p> <!-- Added Category -->
+<p><strong>Category:</strong> <span th:text="${book.category.name}"></span></p>
 <p><strong>Stock:</strong> <span th:text="${book.stock}"></span></p>
 <p><strong>Image:</strong></p>
 <img th:if="${book.imagePath}" th:src="${book.imagePath}" alt="Book Image" width="150" height="200"/>
 <p th:unless="${book.imagePath}">No image available</p>
 <br>
-<a href="/books">Back to List</a>
-<a href="/home" style="margin-left: 10px;">Go Back to Home</a>
+<a href="/website/books">Back to Books</a>
 </body>
 </html>

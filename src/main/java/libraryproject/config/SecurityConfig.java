@@ -2,7 +2,6 @@ package libraryproject.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,16 +18,25 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable()) // Disable CSRF protection (optional, based on your requirements)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/login", "/resources/**").permitAll() // Public endpoints
+                        // Public endpoints (no authentication required)
+                        .requestMatchers(
+                                "/auth/**", // Authentication endpoints (login, logout, etc.)
+                                "/login", // Login page
+                                "/resources/**", // Static resources (CSS, JS, images, etc.)
+                                "/website/**" // Website module (public access)
+                        ).permitAll()
+
+                        // Role-based access control
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Only admins can access /admin/**
-                        .requestMatchers("/student/**").hasRole("STUDENT") // Only students can access /student/**
-                        .anyRequest().authenticated() // All other requests require authentication
+
+                        // All other requests require authentication
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/auth/login") // Login page
-                        .defaultSuccessUrl("/home", true) // Redirect to /home after login
+                        .loginPage("/auth/login") // Custom login page
+                        .defaultSuccessUrl("/home", true) // Redirect to /home after successful login
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -38,6 +46,7 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID") // Delete cookies
                         .permitAll()
                 );
+
         return http.build();
     }
 }
